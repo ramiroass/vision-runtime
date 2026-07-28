@@ -1,12 +1,21 @@
-# 👁️ Vision Runtime Platform v1.0
+# 👁️ Developer Vision Copilot v1.0
 
-> **Plataforma de percepción, memoria, razonamiento y automatización supervisada para aplicaciones de escritorio, independiente de APIs y basada en observación de la interfaz gráfica.**
+> **Un copiloto que entiende el contexto completo del entorno de desarrollo observando la pantalla y combinándolo con información estructurada. No intenta reemplazar VS Code, GitHub o ChatGPT; los conecta.**
 
 ---
 
-## 🎯 Problema que Resuelve
+## 🌟 Las 5 Capacidades Estrellas
 
-Muchas aplicaciones de escritorio (VS Code, Photoshop, Discord, Blender, Terminales, MetaTrader) carecen de APIs públicas abiertas o requieren configuraciones complejas. **Vision Runtime** observa la interfaz gráfica en tiempo real a 20 FPS, construye un árbol estructurado en JSON de lo que ocurre en pantalla, mantiene memoria histórica de 5 minutos y permite a motores de IA (AntiGravity, Gemini, GPT, Claude) responder preguntas y planificar asistencias sin tomar el control de tu PC.
+1. **🛠️ Build Analyzer ("¿Por qué falló el build?"):**  
+   Analiza terminales, stack traces, el archivo abierto y los últimos cambios para indicar exactamente por dónde empezar.
+2. **🔀 Git Context ("¿Qué cambió desde ayer?"):**  
+   No solo muestra un diff, sino que explica el impacto potencial de los cambios en el proyecto.
+3. **🔍 Pull Request Inspector ("Inspeccioná este PR"):**  
+   Lee GitHub, checks de CI/CD, comentarios y tests para generar un diagnóstico inmediato.
+4. **🧠 Workspace Memory ("¿En qué estaba trabajando hace media hora?"):**  
+   Recupera el contexto de trabajo y las ventanas activas tras interrupciones.
+5. **📼 Error Replay ("Mostrame cómo llegué a este error"):**  
+   Reconstruye cuadro por cuadro el historial visual y de eventos previa a la excepción.
 
 ---
 
@@ -33,7 +42,7 @@ Desktop (Windows)
 ## 🚀 Inicio Rápido
 
 ```bash
-# 1. Clonar el repositorio e instalar dependencias
+# 1. Instalar dependencias
 pip install -r requirements.txt
 
 # 2. Ejecutar la plataforma
@@ -42,28 +51,3 @@ uvicorn app.api.server:app --host 127.0.0.1 --port 8080
 
 Accede a la Consola de Observabilidad en Vivo:
 👉 **[http://127.0.0.1:8080](http://127.0.0.1:8080)**
-
----
-
-## 💻 Ejemplo Real con Plugin VS Code
-
-```python
-import httpx
-
-# Invocación al plugin especializado para VS Code
-res = httpx.post("http://127.0.0.1:8080/api/plugins/run", json={"plugin_name": "plugin_vscode"})
-print(res.json())
-```
-
-**Respuesta:**
-```json
-{
-  "plugin": "plugin_vscode",
-  "vscode_active": true,
-  "active_file": "server.py",
-  "terminal_status": "clean",
-  "failing_test": "None",
-  "git_status": "2 modified files, clean working tree",
-  "confidence": 0.95
-}
-```
