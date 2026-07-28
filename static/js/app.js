@@ -1,5 +1,5 @@
 // ==========================================================================
-// Vision Runtime - Application Logic (Sprint 5 & Multi-Step Execution)
+// Vision Runtime - Application Logic (Sprint 5 & Dynamic Multi-Step Execution)
 // ==========================================================================
 
 let isAutonomous = false;
@@ -123,30 +123,63 @@ async function handlePlannerSubmit(e) {
   }
 }
 
-// Aprobar y Ejecutar Secuencia Completa en PC
+// Extrae dinámicamente sitios web o nombres de programas sin harcodear
+function parseGoalToActions(goalText) {
+  const goalLower = goalText.toLowerCase();
+  const actions = [];
+
+  // Palabras clave ignorables
+  const cleanText = goalLower
+    .replace(/abri|abrir|anda a|ir a|buscar|navega a|entrar a|open/g, "")
+    .trim();
+
+  // Buscar URLs o nombres de dominios/servicios
+  const words = cleanText.split(/\s+y\s+|\s+e\s+|,|;/);
+
+  for (let w of words) {
+    let token = w.trim();
+    if (!token) continue;
+
+    if (token.includes("facebook")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.facebook.com" });
+    } else if (token.includes("youtube")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.youtube.com" });
+    } else if (token.includes("instagram")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.instagram.com" });
+    } else if (token.includes("twitter") || token.includes("x.com")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.twitter.com" });
+    } else if (token.includes("reddit")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.reddit.com" });
+    } else if (token.includes("twitch")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.twitch.tv" });
+    } else if (token.includes("deeeep") || token.includes("deeep")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://deeeep.io" });
+    } else if (token.includes("google")) {
+      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.google.com" });
+    } else if (token.includes(".") || token.startsWith("http")) {
+      let url = token.startsWith("http") ? token : "https://" + token;
+      actions.push({ action_type: "OPEN_PROCESS", target: "start " + url });
+    } else {
+      // Intento dinámico genérico para sitios o procesos
+      let url = `https://www.${token}.com`;
+      actions.push({ action_type: "OPEN_PROCESS", target: "start " + url });
+    }
+  }
+
+  if (actions.length === 0) {
+    actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.google.com" });
+  }
+
+  return actions;
+}
+
+// Aprobar y Ejecutar Secuencia Completa Dinámica en PC
 async function handleApproveAndExecute() {
   const output = document.getElementById("planner-output");
   const approveBtn = document.getElementById("btn-approve-execute");
-  approveBtn.textContent = "⏳ Ejecutando secuencia de pasos en PC...";
+  approveBtn.textContent = "⏳ Ejecutando en PC...";
 
-  const goalLower = currentGoal.toLowerCase();
-  let actionsToRun = [];
-
-  if (goalLower.includes("google") && (goalLower.includes("deeeep") || goalLower.includes("deeep"))) {
-    actionsToRun = [
-      { action_type: "OPEN_PROCESS", target: "start https://www.google.com" },
-      { action_type: "OPEN_PROCESS", target: "start https://deeeep.io" }
-    ];
-  } else if (goalLower.includes("deeeep") || goalLower.includes("deeep")) {
-    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start https://deeeep.io" }];
-  } else if (goalLower.includes("google")) {
-    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start https://www.google.com" }];
-  } else if (goalLower.includes("chrome")) {
-    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start chrome" }];
-  } else {
-    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start https://www.google.com" }];
-  }
-
+  const actionsToRun = parseGoalToActions(currentGoal);
   let executionResults = [];
 
   for (let act of actionsToRun) {
@@ -169,14 +202,14 @@ async function handleApproveAndExecute() {
     }
   }
 
-  output.textContent = `✅ SECUENCIA MULTI-PASO COMPLETADA EN PC:\n` + JSON.stringify(executionResults, null, 2);
+  output.textContent = `✅ SECUENCIA DINÁMICA COMPLETADA EN PC:\n` + JSON.stringify(executionResults, null, 2);
   approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
   approveBtn.style.display = "none";
 
   fetch("/api/intent", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ description: `Secuencia '${currentGoal}' ejecutada exitosamente`, status: "SUCCESS" })
+    body: JSON.stringify({ description: `Ejecutado dinámicamente '${currentGoal}' en PC`, status: "SUCCESS" })
   }).then(() => fetchIntents());
 }
 
