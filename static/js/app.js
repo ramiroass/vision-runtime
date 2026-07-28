@@ -124,7 +124,7 @@ async function handlePlannerSubmit(e) {
   }
 }
 
-// Aprobar y Ejecutar Acción en PC
+// Aprobar y Ejecutar Acción en PC (Soporte inteligente para URLs y sitios web)
 async function handleApproveAndExecute() {
   const output = document.getElementById("planner-output");
   const approveBtn = document.getElementById("btn-approve-execute");
@@ -134,7 +134,15 @@ async function handleApproveAndExecute() {
   let actionType = "OPEN_PROCESS";
 
   const goalLower = currentGoal.toLowerCase();
-  if (goalLower.includes("chrome")) {
+
+  // Detección inteligente de URLs (ej. deeeep.io, github.com, etc.)
+  if (goalLower.includes("deeeep") || goalLower.includes("deeep")) {
+    actionTarget = "start https://deeeep.io";
+  } else if (goalLower.includes("github")) {
+    actionTarget = "start https://github.com";
+  } else if (goalLower.includes("youtube")) {
+    actionTarget = "start https://www.youtube.com";
+  } else if (goalLower.includes("chrome")) {
     actionTarget = "start chrome";
   } else if (goalLower.includes("notepad")) {
     actionTarget = "start notepad";
