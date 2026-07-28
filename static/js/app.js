@@ -1,8 +1,9 @@
 // ==========================================================================
-// Vision Runtime - Application Logic (Sprint 5)
+// Vision Runtime - Application Logic (Sprint 5 & Action Runtime)
 // ==========================================================================
 
 let isAutonomous = false;
+let currentGoal = "";
 
 document.addEventListener("DOMContentLoaded", () => {
   startMetricsPolling();
@@ -13,6 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("intent-form").addEventListener("submit", handleIntentSubmit);
   document.getElementById("question-form").addEventListener("submit", handleQuestionSubmit);
   document.getElementById("planner-form").addEventListener("submit", handlePlannerSubmit);
+  document.getElementById("btn-approve-execute").addEventListener("click", handleApproveAndExecute);
   document.getElementById("ocr-selector").addEventListener("change", handleOCRChange);
   document.getElementById("btn-replay").addEventListener("click", handleReplayFetch);
   document.getElementById("btn-emergency-stop").addEventListener("click", handleEmergencyStop);
@@ -98,6 +100,7 @@ async function handlePlannerSubmit(e) {
   const goal = input.value.trim();
   if (!goal) return;
 
+  currentGoal = goal;
   const output = document.getElementById("planner-output");
   output.textContent = "⏳ Generando plan seguro...";
 
@@ -111,9 +114,61 @@ async function handlePlannerSubmit(e) {
       const plan = await res.json();
       output.textContent = JSON.stringify(plan, null, 2);
       input.value = "";
+
+      // Mostrar botón Aprobar y Ejecutar
+      const approveBtn = document.getElementById("btn-approve-execute");
+      approveBtn.style.display = "inline-flex";
     }
   } catch (err) {
     output.textContent = "Error generando plan.";
+  }
+}
+
+// Aprobar y Ejecutar Acción en PC
+async function handleApproveAndExecute() {
+  const output = document.getElementById("planner-output");
+  const approveBtn = document.getElementById("btn-approve-execute");
+  approveBtn.textContent = "⏳ Ejecutando en PC...";
+
+  let actionTarget = "start https://www.google.com";
+  let actionType = "OPEN_PROCESS";
+
+  const goalLower = currentGoal.toLowerCase();
+  if (goalLower.includes("chrome")) {
+    actionTarget = "start chrome";
+  } else if (goalLower.includes("notepad")) {
+    actionTarget = "start notepad";
+  } else if (goalLower.includes("calc")) {
+    actionTarget = "start calc";
+  }
+
+  try {
+    const res = await fetch("/api/actions/authorize-execute", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action_type: actionType,
+        target: actionTarget,
+        auth_token: "USER_APPROVED_TOKEN"
+      })
+    });
+
+    if (res.ok) {
+      const result = await res.json();
+      output.textContent = `✅ EJECUCIÓN APROBADA Y COMPLETADA EN PC:\n` + JSON.stringify(result, null, 2);
+      approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
+      approveBtn.style.display = "none";
+
+      // Log intencion
+      fetch("/api/intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description: `Ejecutado '${currentGoal}' en PC`, status: "EXECUTED" })
+      }).then(() => fetchIntents());
+    }
+  } catch (err) {
+    output.textContent = "Error ejecutando acción en PC.";
+    approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
   }
 }
 

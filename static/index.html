@@ -19,7 +19,7 @@
         <span class="logo">👁️</span>
         <div class="brand-info">
           <h1>Vision Runtime</h1>
-          <span class="badge badge-cyan">Sprint 5 - Autonomous & Safety Guardian</span>
+          <span class="badge badge-cyan">Developer Vision Copilot v1.0</span>
         </div>
       </div>
 
@@ -78,11 +78,14 @@
         <div class="panel-section">
           <h3>🗺️ Task Planner de Asistencia</h3>
           <form id="planner-form" class="intent-input-row">
-            <input type="text" id="planner-input" placeholder="Objetivo (ej. 'Publicar release')" required>
+            <input type="text" id="planner-input" placeholder="Objetivo (ej. 'abri otro chrome')" required>
             <button type="submit" class="btn btn-primary btn-sm">Generar Plan</button>
           </form>
           <div class="json-box" id="planner-output" style="max-height:100px;">
             Sin plan generado.
+          </div>
+          <div style="margin-top:8px; display:flex; justify-content:flex-end;">
+            <button id="btn-approve-execute" class="btn btn-success btn-sm" style="display:none;">✅ APROBAR Y EJECUTAR EN PC</button>
           </div>
         </div>
 
