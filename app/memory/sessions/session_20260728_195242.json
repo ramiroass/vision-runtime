@@ -1,0 +1,652 @@
+[
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:52:42.935289+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:52:44.759729+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:52:46.777403+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:52:48.780706+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:52:50.784411+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 4,
+    "timestamp": "2026-07-28T22:52:52.802575+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:52:54.769402+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:52:56.771808+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:52:58.816448+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:00.772883+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:02.772933+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:53:04.789334+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:53:06.803508+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 4,
+    "timestamp": "2026-07-28T22:53:08.763380+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 4,
+    "timestamp": "2026-07-28T22:53:10.804226+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:12.806983+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:14.801090+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:53:16.791761+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:53:18.803262+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:20.778389+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:22.818555+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:24.782602+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:26.818012+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:53:28.783306+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:53:30.807086+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:32.774933+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:34.792818+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:36.777745+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:38.793331+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:40.782660+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:42.780434+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:44.822244+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:53:46.794149+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:53:48.789311+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:50.793533+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:52.777508+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:54.815239+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:53:56.806045+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:53:58.814845+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 4,
+    "timestamp": "2026-07-28T22:54:00.768301+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 4,
+    "timestamp": "2026-07-28T22:54:02.811953+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 2,
+    "timestamp": "2026-07-28T22:54:04.789379+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:54:06.768727+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:54:08.811720+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:54:10.777049+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:54:12.777536+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 4,
+    "timestamp": "2026-07-28T22:54:14.812987+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 3,
+    "timestamp": "2026-07-28T22:54:16.808159+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 1,
+    "timestamp": "2026-07-28T22:54:18.800390+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  },
+  {
+    "frame_index": 0,
+    "timestamp": "2026-07-28T22:54:20.773497+00:00",
+    "active_window": "Cmd - Workspace Activo",
+    "ocr_text": "Vision Runtime Terminal v1.0 FastAPI Server Running on 127.0.0.1:8080 pytest tests/ -s 100% PASSED Autonomous Mode: OFF",
+    "buttons": [
+      "Run Test",
+      "Commit & Push",
+      "Emergency Stop"
+    ],
+    "intent": null,
+    "confidence": 0.94
+  }
+]

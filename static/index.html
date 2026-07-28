@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vision Runtime - Consola de Observabilidad de Escritorio</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <!-- CSS -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <div class="vision-app">
+    <!-- Navbar / Header de Observabilidad -->
+    <header class="navbar glass-card">
+      <div class="brand">
+        <span class="logo">👁️</span>
+        <div class="brand-info">
+          <h1>Vision Runtime</h1>
+          <span class="badge badge-cyan">Sprint 5 - Autonomous & Safety Guardian</span>
+        </div>
+      </div>
+
+      <!-- Live Telemetry Meters -->
+      <div class="telemetry-bar">
+        <div class="stat-card">
+          <span class="lbl">FPS Reales</span>
+          <span class="val highlight-cyan" id="meter-fps">0.0 / 20</span>
+        </div>
+        <div class="stat-card">
+          <span class="lbl">Latencia Captura</span>
+          <span class="val highlight-green" id="meter-latency">0 ms</span>
+        </div>
+        <div class="stat-card">
+          <span class="lbl">Motor OCR</span>
+          <span class="val highlight-cyan" id="meter-ocr">FastOCR</span>
+        </div>
+        <div class="stat-card">
+          <span class="lbl">Memoria (5 Min)</span>
+          <span class="val highlight-green" id="meter-memory">0 Cuadros</span>
+        </div>
+        <div class="stat-card">
+          <span class="lbl">Seguridad</span>
+          <span class="val highlight-red" id="meter-autonomous">AUTONOMOUS: OFF 🔴</span>
+        </div>
+        <div class="stat-card">
+          <button id="btn-emergency-stop" class="btn btn-danger btn-sm">🚨 EMERGENCY STOP</button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Workspace Main Grid -->
+    <div class="workspace-grid">
+      <!-- Panel Izquierdo: Visualizador de Pantalla en Directo -->
+      <main class="desktop-feed-area glass-card">
+        <div class="feed-header">
+          <h3>🖥️ Percepción de Escritorio en Tiempo Real (Live Feed)</h3>
+          <div style="display:flex; gap:10px; align-items:center;">
+            <select id="ocr-selector" style="background:rgba(0,0,0,0.6); color:#00f2fe; border:1px solid rgba(255,255,255,0.1); border-radius:6px; padding:4px 8px; font-size:11px;">
+              <option value="FastOCR">FastOCR Engine</option>
+              <option value="Tesseract">Tesseract Engine</option>
+              <option value="EasyOCR">EasyOCR Engine</option>
+            </select>
+            <button id="btn-toggle-auto" class="btn btn-secondary btn-sm">⚡ Toggle Autónomo</button>
+            <button id="btn-replay" class="btn btn-secondary btn-sm">📼 Replay de Sesión</button>
+          </div>
+        </div>
+        <div class="feed-container">
+          <img id="screen-stream" src="/api/frame" alt="Desktop Perception Stream">
+        </div>
+      </main>
+
+      <!-- Panel Derecho: Scene Description JSON & Log de Intenciones -->
+      <aside class="telemetry-panel glass-card">
+        <!-- Task Planner Bar -->
+        <div class="panel-section">
+          <h3>🗺️ Task Planner de Asistencia</h3>
+          <form id="planner-form" class="intent-input-row">
+            <input type="text" id="planner-input" placeholder="Objetivo (ej. 'Publicar release')" required>
+            <button type="submit" class="btn btn-primary btn-sm">Generar Plan</button>
+          </form>
+          <div class="json-box" id="planner-output" style="max-height:100px;">
+            Sin plan generado.
+          </div>
+        </div>
+
+        <!-- Scene Description JSON -->
+        <div class="panel-section">
+          <h3>🧩 Scene Description (Capa 2)</h3>
+          <div class="json-box" id="scene-json">
+            Cargando descripción de escena...
+          </div>
+        </div>
+
+        <!-- Log de Intenciones -->
+        <div class="panel-section">
+          <h3>🎯 Intenciones del Usuario (Capa 3)</h3>
+          <form id="intent-form" class="intent-input-row">
+            <input type="text" id="intent-input" placeholder="Registrar intención (ej. 'Inicié sesión')" required>
+            <button type="submit" class="btn btn-primary btn-sm">Log Intención</button>
+          </form>
+          <div class="intents-list" id="intents-list">
+            <!-- Inyectado dinámicamente -->
+          </div>
+        </div>
+
+        <!-- AntiGravity Reasoning Engine Bar -->
+        <div class="panel-section">
+          <h3>🧠 Consultar Motor AntiGravity (Capa 4)</h3>
+          <form id="question-form" class="intent-input-row">
+            <input type="text" id="question-input" placeholder="Pregunta sobre la pantalla..." required>
+            <button type="submit" class="btn btn-success btn-sm">Consultar</button>
+          </form>
+          <div class="reasoning-box" id="reasoning-output">
+            Esperando consulta del usuario...
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
