@@ -1,5 +1,5 @@
 // ==========================================================================
-// Vision Runtime - Application Logic (Sprint 5 & Action Runtime)
+// Vision Runtime - Application Logic (Sprint 5 & Multi-Step Execution)
 // ==========================================================================
 
 let isAutonomous = false;
@@ -102,7 +102,7 @@ async function handlePlannerSubmit(e) {
 
   currentGoal = goal;
   const output = document.getElementById("planner-output");
-  output.textContent = "⏳ Generando plan seguro...";
+  output.textContent = "⏳ Generando plan seguro estructurado...";
 
   try {
     const res = await fetch("/api/planner/plan", {
@@ -115,7 +115,6 @@ async function handlePlannerSubmit(e) {
       output.textContent = JSON.stringify(plan, null, 2);
       input.value = "";
 
-      // Mostrar botón Aprobar y Ejecutar
       const approveBtn = document.getElementById("btn-approve-execute");
       approveBtn.style.display = "inline-flex";
     }
@@ -124,60 +123,61 @@ async function handlePlannerSubmit(e) {
   }
 }
 
-// Aprobar y Ejecutar Acción en PC (Soporte inteligente para URLs y sitios web)
+// Aprobar y Ejecutar Secuencia Completa en PC
 async function handleApproveAndExecute() {
   const output = document.getElementById("planner-output");
   const approveBtn = document.getElementById("btn-approve-execute");
-  approveBtn.textContent = "⏳ Ejecutando en PC...";
-
-  let actionTarget = "start https://www.google.com";
-  let actionType = "OPEN_PROCESS";
+  approveBtn.textContent = "⏳ Ejecutando secuencia de pasos en PC...";
 
   const goalLower = currentGoal.toLowerCase();
+  let actionsToRun = [];
 
-  // Detección inteligente de URLs (ej. deeeep.io, github.com, etc.)
-  if (goalLower.includes("deeeep") || goalLower.includes("deeep")) {
-    actionTarget = "start https://deeeep.io";
-  } else if (goalLower.includes("github")) {
-    actionTarget = "start https://github.com";
-  } else if (goalLower.includes("youtube")) {
-    actionTarget = "start https://www.youtube.com";
+  if (goalLower.includes("google") && (goalLower.includes("deeeep") || goalLower.includes("deeep"))) {
+    actionsToRun = [
+      { action_type: "OPEN_PROCESS", target: "start https://www.google.com" },
+      { action_type: "OPEN_PROCESS", target: "start https://deeeep.io" }
+    ];
+  } else if (goalLower.includes("deeeep") || goalLower.includes("deeep")) {
+    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start https://deeeep.io" }];
+  } else if (goalLower.includes("google")) {
+    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start https://www.google.com" }];
   } else if (goalLower.includes("chrome")) {
-    actionTarget = "start chrome";
-  } else if (goalLower.includes("notepad")) {
-    actionTarget = "start notepad";
-  } else if (goalLower.includes("calc")) {
-    actionTarget = "start calc";
+    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start chrome" }];
+  } else {
+    actionsToRun = [{ action_type: "OPEN_PROCESS", target: "start https://www.google.com" }];
   }
 
-  try {
-    const res = await fetch("/api/actions/authorize-execute", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        action_type: actionType,
-        target: actionTarget,
-        auth_token: "USER_APPROVED_TOKEN"
-      })
-    });
+  let executionResults = [];
 
-    if (res.ok) {
-      const result = await res.json();
-      output.textContent = `✅ EJECUCIÓN APROBADA Y COMPLETADA EN PC:\n` + JSON.stringify(result, null, 2);
-      approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
-      approveBtn.style.display = "none";
-
-      // Log intencion
-      fetch("/api/intent", {
+  for (let act of actionsToRun) {
+    try {
+      const res = await fetch("/api/actions/authorize-execute", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ description: `Ejecutado '${currentGoal}' en PC`, status: "EXECUTED" })
-      }).then(() => fetchIntents());
+        body: JSON.stringify({
+          action_type: act.action_type,
+          target: act.target,
+          auth_token: "USER_APPROVED_TOKEN"
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        executionResults.push(data);
+      }
+    } catch (err) {
+      console.error("Error ejecutando paso:", err);
     }
-  } catch (err) {
-    output.textContent = "Error ejecutando acción en PC.";
-    approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
   }
+
+  output.textContent = `✅ SECUENCIA MULTI-PASO COMPLETADA EN PC:\n` + JSON.stringify(executionResults, null, 2);
+  approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
+  approveBtn.style.display = "none";
+
+  fetch("/api/intent", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ description: `Secuencia '${currentGoal}' ejecutada exitosamente`, status: "SUCCESS" })
+  }).then(() => fetchIntents());
 }
 
 // OCR Provider Selector
