@@ -1,44 +1,43 @@
-from PIL import Image
 from typing import Dict, Any
-from app.vision.frame_diff import frame_diff_analyzer
 from app.vision.window_detector import window_detector
 from app.vision.ocr import ocr_engine
 from app.vision.ui_detector import ui_detector
-from app.event_bus import event_bus
+from app.vision.tab_inspector import tab_inspector
+from app.security.confidence import confidence_pipeline
 
 class SceneBuilder:
-    def build_scene(self, frame: Image.Image) -> Dict[str, Any]:
-        """Construye el objeto estructurado JSON Scene Description."""
-        diff_info = frame_diff_analyzer.analyze_diff(frame)
-        win_info = window_detector.get_active_window()
-        ocr_info = ocr_engine.extract_text(frame)
-        ui_info = ui_detector.detect_components(frame)
+    def build_scene(self, frame) -> Dict[str, Any]:
+        """Construye un Scene Graph determinista completo con objetos bien definidos."""
+        active_window_info = window_detector.get_active_window_info()
+        ocr_result = ocr_engine.extract_text(frame) if frame else {"text": ""}
+        ui_elements = ui_detector.detect_components(frame) if frame else []
 
-        # Confidence Pipeline
-        capture_conf = 0.99
-        ocr_conf = ocr_info.get("confidence", 0.90)
-        ui_conf = ui_info.get("confidence", 0.85)
-        overall_conf = round((capture_conf + ocr_conf + ui_conf) / 3.0, 2)
+        active_title = active_window_info.get("title", "Windows Desktop")
+        ocr_text = ocr_result.get("text", "")
 
-        scene = {
-            "active_window": win_info["window_title"],
-            "active_app": win_info["active_app"],
-            "changed": diff_info["changed"],
-            "change_percent": diff_info["change_percent"],
-            "buttons": ui_info["buttons"],
-            "inputs": ui_info["inputs"],
-            "ocr_text": ocr_info["text"],
-            "text_snippets": ocr_info["snippets"],
-            "confidence": {
-                "capture": capture_conf,
-                "ocr": ocr_conf,
-                "ui": ui_conf,
-                "overall": overall_conf
-            }
+        # Extracción determinista de pestañas
+        tabs = tab_inspector.extract_browser_tabs(active_title, ocr_text)
+
+        confidence_metrics = confidence_pipeline.calculate_stage_confidence({
+            "frame": frame,
+            "ocr_text": ocr_text,
+            "ui_elements": ui_elements
+        })
+
+        return {
+            "active_window": active_title,
+            "active_app": active_window_info.get("app_name", "Desconocido"),
+            "process_id": active_window_info.get("pid", 0),
+            "scene_graph": {
+                "window": active_title,
+                "app": active_window_info.get("app_name", "Desconocido"),
+                "tabs": tabs,
+                "buttons": [el["label"] for el in ui_elements if el["type"] == "button"],
+                "textboxes": [el["label"] for el in ui_elements if el["type"] == "textbox"]
+            },
+            "ocr_text": ocr_text,
+            "buttons": [el["label"] for el in ui_elements if el["type"] == "button"],
+            "confidence": confidence_metrics
         }
-
-        # Publicar evento SCENE_PROCESSED en el Event Bus
-        event_bus.publish("SCENE_PROCESSED", scene)
-        return scene
 
 scene_builder = SceneBuilder()
