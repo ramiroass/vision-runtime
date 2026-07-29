@@ -1,3 +1,4 @@
+import re
 from typing import Dict, Any, List
 from app.memory.session_memory import five_minute_memory
 
@@ -15,7 +16,16 @@ class AntiGravityEngine:
         question_lower = question.lower()
         answer = ""
 
-        if "error" in question_lower or "fallo" in question_lower:
+        # Detección específica de pestañas en navegadores
+        if "pestaña" in question_lower or "tab" in question_lower:
+            # Extraer líneas de texto OCR que parecen nombres de pestañas
+            lines = [line.strip() for line in ocr_text.split("\n") if len(line.strip()) > 3]
+            tabs_detected = lines[:4] if lines else [active_window]
+
+            tabs_formatted = ", ".join([f"'{t}'" for t in tabs_detected])
+            answer = f"Pestañas y elementos superiores detectados en '{active_window}': {tabs_formatted}."
+
+        elif "error" in question_lower or "fallo" in question_lower:
             if "error" in ocr_text.lower() or "failed" in ocr_text.lower():
                 answer = f"Se detectó un texto de error en la pantalla: '{ocr_text[:120]}...'"
             else:
@@ -29,7 +39,9 @@ class AntiGravityEngine:
             answer = f"Lectura OCR en pantalla: {summary_text}"
 
         else:
-            answer = f"Observando '{active_window}' ({active_app}). En respuesta a tu consulta '{question}': El sistema registra {snapshots_count} eventos en los últimos 5 minutos con una confianza del {int(confidence*100)}%."
+            lines = [line.strip() for line in ocr_text.split("\n") if len(line.strip()) > 2]
+            preview = " | ".join(lines[:3]) if lines else active_window
+            answer = f"Observando '{active_window}'. Elementos visuales detectados: {preview}. Registrados {snapshots_count} eventos en 5 min."
 
         proposed_plan = [
             {"step": 1, "action": "OBSERVE", "target": active_window, "status": "COMPLETED"},
