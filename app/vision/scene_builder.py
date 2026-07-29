@@ -22,6 +22,22 @@ class SceneBuilder:
         # Extracción determinista de pestañas
         tabs = tab_inspector.extract_browser_tabs(active_title, ocr_text)
 
+        # Parsear elementos UI de forma segura
+        button_labels = []
+        textbox_labels = []
+        for el in ui_elements:
+            if isinstance(el, dict):
+                label = el.get("label", str(el))
+                el_type = el.get("type", "button")
+            else:
+                label = str(el)
+                el_type = "button"
+
+            if el_type == "button":
+                button_labels.append(label)
+            elif el_type == "textbox":
+                textbox_labels.append(label)
+
         confidence_metrics = confidence_pipeline.calculate(0.95, 0.94, 0.93)
 
         return {
@@ -32,11 +48,11 @@ class SceneBuilder:
                 "window": active_title,
                 "app": active_window_info.get("app_name", "Desconocido"),
                 "tabs": tabs,
-                "buttons": [el["label"] for el in ui_elements if el.get("type") == "button"],
-                "textboxes": [el["label"] for el in ui_elements if el.get("type") == "textbox"]
+                "buttons": button_labels,
+                "textboxes": textbox_labels
             },
             "ocr_text": ocr_text,
-            "buttons": [el["label"] for el in ui_elements if el.get("type") == "button"],
+            "buttons": button_labels,
             "confidence": confidence_metrics
         }
 
