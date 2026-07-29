@@ -13,6 +13,7 @@ from app.vision.ocr import ocr_engine
 from app.memory.events_db import events_db
 from app.memory.session_replay import session_replay_engine
 from app.memory.session_memory import five_minute_memory
+from app.memory.world_state import world_state_manager
 from app.reasoning.antigravity_core import antigravity_engine
 from app.planner.task_planner import task_planner
 from app.plugins.registry import plugin_registry
