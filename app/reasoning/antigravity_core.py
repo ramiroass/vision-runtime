@@ -1,37 +1,49 @@
 from typing import Dict, Any, List
 from app.memory.session_memory import five_minute_memory
 
-class AntiGravityReasoningEngine:
-    def evaluate_scene_context(self, scene: Dict[str, Any], user_question: str = None) -> Dict[str, Any]:
-        """Motor de razonamiento AntiGravity que consulta la escena actual + la memoria de 5 minutos."""
-        active_window = scene.get("active_window", "Desconocido")
-        active_app = scene.get("active_app", "Desconocido")
-        history = five_minute_memory.get_history()
+class AntiGravityEngine:
+    def evaluate_scene_context(self, scene_context: Dict[str, Any], question: str) -> Dict[str, Any]:
+        """Evalúa dinámicamente el contexto de la escena en vivo + memoria rodante de 5 min."""
+        active_window = scene_context.get("active_window", "Escritorio de Windows")
+        active_app = scene_context.get("active_app", "Sistema")
+        ocr_text = scene_context.get("ocr_text", "")
+        confidence = scene_context.get("confidence", {}).get("overall", 0.94)
 
-        answer = f"Actualmente observo '{active_window}' ({active_app}). "
-        
-        if "hace" in user_question.lower() or "paso" in user_question.lower() or "pasó" in user_question.lower():
-            if history:
-                prev = history[0]
-                answer += f"En la memoria reciente (hace {len(history)} frames), estabas trabajando en '{prev['active_window']}'."
+        history = five_minute_memory.get_history()
+        snapshots_count = len(history)
+
+        question_lower = question.lower()
+        answer = ""
+
+        if "error" in question_lower or "fallo" in question_lower:
+            if "error" in ocr_text.lower() or "failed" in ocr_text.lower():
+                answer = f"Se detectó un texto de error en la pantalla: '{ocr_text[:120]}...'"
             else:
-                answer += "Inicié la memoria reciente de 5 minutos."
+                answer = f"No se detectan errores explícitos en '{active_window}'. La aplicación se observa limpia."
+
+        elif "ventana" in question_lower or "abierto" in question_lower or "programa" in question_lower:
+            answer = f"La aplicación activa en primer plano es '{active_window}' ({active_app}). Hay {snapshots_count} capturas grabadas en la memoria rodante de 5 minutos."
+
+        elif "texto" in question_lower or "lee" in question_lower or "pantalla" in question_lower:
+            summary_text = ocr_text[:200] if ocr_text else "Sin texto detectado"
+            answer = f"Lectura OCR en pantalla: {summary_text}"
+
         else:
-            answer += f"La escena tiene un nivel de confianza del {int(scene.get('confidence', {}).get('overall', 0.9) * 100)}%."
+            answer = f"Observando '{active_window}' ({active_app}). En respuesta a tu consulta '{question}': El sistema registra {snapshots_count} eventos en los últimos 5 minutos con una confianza del {int(confidence*100)}%."
 
         proposed_plan = [
             {"step": 1, "action": "OBSERVE", "target": active_window, "status": "COMPLETED"},
-            {"step": 2, "action": "HISTORICAL_QUERY", "target": "Consultar historial de 5 min", "status": "ANALYZED"},
-            {"step": 3, "action": "PROPOSE_HELP", "target": "Sugerir optimización de flujo", "status": "WAITING_APPROVAL"}
+            {"step": 2, "action": "HISTORICAL_QUERY", "target": f"Historial 5 min ({snapshots_count} snapshots)", "status": "ANALYZED"},
+            {"step": 3, "action": "RESPONSE_SYNTHESIS", "target": f"Consulta: '{question[:30]}...'", "status": "COMPLETED"}
         ]
 
         return {
-            "engine": "AntiGravity Core v3.0 (Reasoning + 5-Min Memory)",
-            "active_context": active_app,
-            "historical_frames_count": len(history),
+            "engine": "AntiGravity Core v3.0",
+            "question": question,
             "answer": answer,
-            "proposed_plan": proposed_plan,
-            "confidence": scene.get("confidence", {}).get("overall", 0.90)
+            "active_window": active_window,
+            "ocr_summary": ocr_text[:150],
+            "proposed_plan": proposed_plan
         }
 
-antigravity_engine = AntiGravityReasoningEngine()
+antigravity_engine = AntiGravityEngine()
