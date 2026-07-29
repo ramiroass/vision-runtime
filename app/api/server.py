@@ -179,10 +179,19 @@ def log_intent(data: IntentRequest):
 
 @app.post("/api/question")
 def ask_question(data: QuestionRequest):
-    frame = screen_capture_engine.capture_frame()
-    scene = scene_builder.build_scene(frame) if frame else {}
-    reasoning = antigravity_engine.evaluate_scene_context(scene, data.question)
-    return reasoning
+    try:
+        frame = screen_capture_engine.capture_frame()
+        scene = scene_builder.build_scene(frame)
+        reasoning = antigravity_engine.evaluate_scene_context(scene, data.question)
+        return reasoning
+    except Exception as e:
+        return {
+            "engine": "AntiGravity Core v3.0 (Fallback)",
+            "query_type": "ERROR_FALLBACK",
+            "question": data.question,
+            "answer": f"Error evaluando escena: {str(e)}",
+            "proposed_plan": []
+        }
 
 # Montar estáticos
 static_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "static")
