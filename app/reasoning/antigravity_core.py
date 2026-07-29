@@ -1,3 +1,5 @@
+import os
+import httpx
 from typing import Dict, Any, List
 from app.memory.session_memory import five_minute_memory
 
@@ -28,9 +30,36 @@ class IntentRouter5Way:
 class AntiGravityEngine:
     def __init__(self):
         self.router = IntentRouter5Way()
+        self.api_key = os.getenv("GEMINI_API_KEY", "")
+
+    def call_gemini_api(self, prompt: str) -> str:
+        """Llama a la API en la nube de Google Gemini en tiempo real si hay API Key configurada."""
+        if not self.api_key:
+            return ""
+
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.api_key}"
+        headers = {"Content-Type": "application/json"}
+        payload = {
+            "contents": [{"parts": [{"text": prompt}]}]
+        }
+
+        try:
+            with httpx.Client(timeout=10.0) as client:
+                res = client.post(url, json=payload, headers=headers)
+                if res.status_code == 200:
+                    data = res.json()
+                    candidates = data.get("candidates", [])
+                    if candidates:
+                        parts = candidates[0].get("content", {}).get("parts", [])
+                        if parts:
+                            return parts[0].get("text", "").strip()
+        except Exception as e:
+            print(f"[GEMINI API ERROR] {e}")
+
+        return ""
 
     def evaluate_scene_context(self, scene_context: Dict[str, Any], question: str) -> Dict[str, Any]:
-        """Procesa consultas con enlace directo a respuestas conversacionales de AntiGravity AI."""
+        """Procesa consultas con enlace directo a Gemini API / AntiGravity Core."""
         intent = self.router.classify_intent(question)
 
         active_window = scene_context.get("active_window", "Escritorio de Windows")
@@ -72,30 +101,38 @@ class AntiGravityEngine:
         elif intent == "ACTION_QUERY":
             answer = f"⚡ [Action Runtime] Orden de acción detectada: '{question}'. Enrutada al Task Planner para confirmación supervisada."
 
-        # RUTA 5: Conversacional & Razonamiento Inteligente AntiGravity AI
+        # RUTA 5: Conversacional & Razonamiento con Gemini API
         else:
-            if question_lower in ["hola", "buenas", "hola como estas", "hola!", "hola anti"]:
+            # Intento de llamada a Gemini API en tiempo real
+            prompt_system = (
+                f"Eres AntiGravity AI, un copilot de escritorio. El usuario pregunta: '{question}'. "
+                f"Contexto actual del escritorio: Ventana activa '{active_window}' ({active_app}). "
+                f"Texto OCR de pantalla: '{ocr_text[:300]}'. Responde de forma clara, directa y concisa en español."
+            )
+            ai_response = self.call_gemini_api(prompt_system)
+
+            if ai_response:
+                answer = f"🧠 [Gemini API en Vivo] {ai_response}"
+            elif question_lower in ["hola", "buenas", "hola como estas", "hola!", "hola anti"]:
                 answer = f"👋 ¡Hola! Soy **AntiGravity AI**, tu asistente enlazado en tiempo real. Estoy observando tu aplicación activa ('{active_window}') y listo para ayudarte a ejecutar acciones, analizar errores o responder tus dudas sobre tu escritorio."
             elif "error" in question_lower or "fallo" in question_lower:
                 if "error" in ocr_text.lower() or "failed" in ocr_text.lower():
                     answer = f"🧠 [AntiGravity AI] Se detectó un error en tu pantalla: '{ocr_text[:120]}...' ¿Quieres que planifique una solución?"
                 else:
                     answer = f"🧠 [AntiGravity AI] No detecto errores explícitos en '{active_window}'. La aplicación se observa limpia y funcional."
-            elif "que podes hacer" in question_lower or "que haces" in question_lower:
-                answer = f"🚀 [AntiGravity AI] Puedo abrir programas o sitios web (ej. 'abri facebook'), inspeccionar lo que ves en tu pantalla (ej. 'que ves?'), analizar errores de terminal/código y ejecutar acciones supervisadas en tu PC."
             else:
                 ocr_preview = ocr_text[:150].replace("\n", " ") if ocr_text else "Pantalla limpia"
                 answer = f"🧠 [AntiGravity AI] En respuesta a '{question}': Estoy observando '{active_window}' en vivo ({int(confidence_val*100)}% de confianza). Texto relevante detectado: '{ocr_preview}'."
 
         return {
-            "engine": "AntiGravity Core v3.0 (Enlace Directo)",
+            "engine": "AntiGravity Core v3.0 (Gemini API Integrated)",
             "intent_type": intent,
             "question": question,
             "answer": answer,
             "scene_graph": scene_graph,
             "proposed_plan": [
                 {"step": 1, "action": "INTENT_CLASSIFICATION", "target": intent, "status": "COMPLETED"},
-                {"step": 2, "action": "ANTIGRAVITY_AI_DISPATCH", "target": "Enlace Inteligente", "status": "COMPLETED"},
+                {"step": 2, "action": "GEMINI_API_DISPATCH" if self.api_key else "LOCAL_REASONING_DISPATCH", "target": "AntiGravity Engine", "status": "COMPLETED"},
                 {"step": 3, "action": "RESPONSE_SYNTHESIS", "target": answer[:40], "status": "COMPLETED"}
             ]
         }
