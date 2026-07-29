@@ -1,50 +1,66 @@
-# 🏗️ Arquitectura del Sistema: Vision Runtime v1.0
+# 🏗️ Arquitectura Completa: Desktop Agentic OS (Vision Runtime Platform)
+
+> **Filosofía Fundamental:**  
+> El Modelo de Lenguaje (LLM) NO es la aplicación entera; es un motor modular de razonamiento dentro de un Sistema Operativo para Agentes de Escritorio.
+
+---
+
+## 🏛️ El Pipeline de 10 Pasos Desacoplado
 
 ```text
-Desktop
-
-↓
-
-Capture Runtime (DXGI / MSS)
-
-↓
-
-Vision Runtime (Frame Diff, OCR, UI Detector, Scene Builder)
-
-↓
-
-World State (Estado global vivo del escritorio)
-
-↓
-
-Memory Runtime (events.db, timeline.jsonl, 5-Min Rolling Memory, Session Replay)
-
-↓
-
-Reasoning Runtime (AntiGravity Engine)
-
-↓
-
-Planner (Task Planner de Asistencia)
-
-↓
-
-Guardian (Policy Engine & Emergency Stop Circuit Breaker)
-
-↓
-
-Action Runtime (Ejecución Supervisada de Acciones)
-
-↓
-
-Plugins (VS Code, GitHub, Terminal)
+                 Usuario
+                    │
+          Lenguaje natural
+                    │
+                    ▼
+            Goal Manager (¿Qué quiere lograr?)
+                    │
+                    ▼
+             Task Planner (¿Cómo lo hago?)
+                    │
+                    ▼
+           Skill / Capability (¿Qué sé hacer?)
+                    │
+                    ▼
+            Action Runtime (mouse, teclado, procesos)
+                    │
+                    ▼
+           Vision Runtime (¿Qué pasó realmente?)
+                    │
+                    ▼
+          Verification Engine (¿Coincide con lo esperado?)
+                    │
+        Sí ─────────┴──────── No
+                    │                │
+                    ▼                ▼
+             siguiente paso    Recovery Engine (intenta otra estrategia)
+                                     │
+                                     ▼
+                              Learning Engine
 ```
 
-## 🧩 Descripción de Componentes Desacoplados
+---
 
-1. **Capture Runtime:** Motor puro de captura en baja latencia. Emite eventos pub/sub (`FRAME_CAPTURED`, `WINDOW_CHANGED`).
-2. **Vision Runtime:** Procesa cuadros y construye el objeto ligero `JSON Scene Description`.
-3. **World State:** Mantiene una instantánea viva del estado del escritorio para consultas inmediatas del Planner.
-4. **Memory Runtime:** Almacena eventos en SQLite, stream en `timeline.jsonl` y búfer circular de 5 minutos.
-5. **Reasoning Runtime:** Motor AntiGravity que razona sobre contexto JSON sin procesar píxeles crudos.
-6. **Guardian & Action Runtime:** Cortafuegos de seguridad con token del usuario y botón `🚨 EMERGENCY STOP`.
+## 🧩 La Matriz de Decisión de Capacidades
+
+```text
+Objetivo del Usuario
+  │
+  ├── ¿Existe Plugin Especializado? (ej. VS Code Plugin)
+  │     └── SÍ ➔ Ejecutar vía Plugin Especializado (Confianza 96%, Menor Latencia)
+  │
+  └── NO ➔ Usar Capability Genérica de Escritorio (Detección UI + Fallback OCR)
+```
+
+---
+
+## 🔄 El Bucle Continuo Agentic
+
+$$\text{OBSERVE} \longrightarrow \text{PLAN} \longrightarrow \text{ACT} \longrightarrow \text{VERIFY} \longrightarrow \text{LEARN} \longrightarrow \text{OBSERVE}$$
+
+1. **`Vision Runtime` (Ojos):** Observación continua a 20 FPS (DXGI / MSS).
+2. **`Action Runtime` (Manos):** Brazo robótico para mouse, teclado y procesos.
+3. **`Memory Runtime` (Memoria):** Búfer rodante de 5 min y SQLite.
+4. **`Planner` (Cerebro):** Descomposición de intenciones en Habilidades Compuestas (`Skills`).
+5. **`Goal Manager` (Objetivo):** Control de metas a largo plazo.
+6. **`LLM (AntiGravity Core)`:** Motor de razonamiento modular reemplazable (Gemini, Claude, GPT).
