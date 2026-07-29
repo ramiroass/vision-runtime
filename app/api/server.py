@@ -112,6 +112,23 @@ def get_scene():
         return scene
     raise HTTPException(status_code=500, detail="Error en percepción de escena")
 
+@app.get("/api/world")
+def get_world():
+    """Endpoint de auditoría pura del World State y Scene Graph (Sin LLM, sin Intent Router)."""
+    frame = screen_capture_engine.capture_frame()
+    scene = scene_builder.build_scene(frame)
+    world_state = world_state_manager.get_world_state()
+    return {
+        "audit": "RAW_WORLD_STATE_PERCEPTION",
+        "active_window": scene.get("active_window"),
+        "active_app": scene.get("active_app"),
+        "process_id": scene.get("process_id"),
+        "scene_graph": scene.get("scene_graph"),
+        "world_state": world_state,
+        "ocr_summary": scene.get("ocr_text", "")[:300],
+        "confidence": scene.get("confidence")
+    }
+
 @app.post("/api/security/emergency-stop")
 def trigger_emergency_stop():
     return emergency_stop_controller.trigger_emergency_stop()
