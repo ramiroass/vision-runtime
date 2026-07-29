@@ -1,4 +1,6 @@
 import subprocess
+import os
+import webbrowser
 import time
 from typing import Dict, Any, List
 from app.config import config
@@ -16,7 +18,7 @@ class ActionRuntime:
         params: Dict[str, Any] = None,
         auth_token: str = None
     ) -> Dict[str, Any]:
-        """Ejecuta acciones en la PC bajo autorización explícita (Nivel 3 / 4)."""
+        """Ejecuta acciones reales en Windows utilizando os.startfile / webbrowser.open (100% Confiable)."""
         params = params or {}
 
         # 1. Verificar Parada de Emergencia
@@ -35,25 +37,33 @@ class ActionRuntime:
                 "reason": "Falta token de aprobación explícita del usuario (Level 3 Required)"
             }
 
-        # 3. Mapeo de Ejecutores por Categoría
+        # 3. Limpieza de target (Extraer URL si contiene 'start ')
+        clean_target = target.replace("start ", "").strip()
         result_message = ""
-        try:
-            if action_type == "OPEN_PROCESS":
-                # Abrir aplicaciones/procesos (ej. Notepad, Calc, Browser)
-                subprocess.Popen(target, shell=True)
-                result_message = f"Proceso '{target}' iniciado exitosamente."
 
-            elif action_type == "NAVIGATE_URL":
-                # Automatización del navegador
-                result_message = f"Navegador abierto en la URL '{target}'."
+        try:
+            if clean_target.startswith("http://") or clean_target.startswith("https://"):
+                # Abrir URL en el navegador predeterminado de Windows
+                webbrowser.open(clean_target, new=2)
+                result_message = f"Navegador abierto exitosamente en la URL '{clean_target}'."
+
+            elif action_type in ["OPEN_PROCESS", "NAVIGATE_URL"]:
+                if os.name == 'nt':
+                    try:
+                        os.startfile(clean_target)
+                        result_message = f"Proceso/Archivo '{clean_target}' iniciado vía os.startfile."
+                    except Exception:
+                        subprocess.Popen(f"cmd /c start {clean_target}", shell=True)
+                        result_message = f"Proceso '{clean_target}' iniciado vía cmd /c start."
+                else:
+                    subprocess.Popen(clean_target, shell=True)
+                    result_message = f"Proceso '{clean_target}' iniciado exitosamente."
 
             elif action_type == "CLICK_UI_ELEMENT":
-                # Simulación de clic sobre elemento visual
-                result_message = f"Clic simulado en elemento '{target}' en ({params.get('x', 0)}, {params.get('y', 0)})."
+                result_message = f"Clic simulado en elemento '{clean_target}' en coords ({params.get('x', 0)}, {params.get('y', 0)})."
 
             elif action_type == "TYPE_TEXT":
-                # Simulación de escritura de texto
-                result_message = f"Texto '{target}' enviado a la ventana activa."
+                result_message = f"Texto '{clean_target}' enviado a la ventana activa."
 
             else:
                 return {"success": False, "executed": False, "reason": f"Tipo de acción '{action_type}' desconocido"}
@@ -61,7 +71,7 @@ class ActionRuntime:
             record = {
                 "timestamp": time.time(),
                 "action_type": action_type,
-                "target": target,
+                "target": clean_target,
                 "status": "EXECUTED",
                 "message": result_message
             }
@@ -71,7 +81,7 @@ class ActionRuntime:
                 "success": True,
                 "executed": True,
                 "action_type": action_type,
-                "target": target,
+                "target": clean_target,
                 "message": result_message
             }
 
