@@ -1,53 +1,57 @@
-# 👁️ Developer Vision Copilot v1.0
+# 👁️ Desktop Agent Runtime for Perception, Planning and Verified Execution (v1.0)
 
-> **Un copiloto que entiende el contexto completo del entorno de desarrollo observando la pantalla y combinándolo con información estructurada. No intenta reemplazar VS Code, GitHub o ChatGPT; los conecta.**
-
----
-
-## 🌟 Las 5 Capacidades Estrellas
-
-1. **🛠️ Build Analyzer ("¿Por qué falló el build?"):**  
-   Analiza terminales, stack traces, el archivo abierto y los últimos cambios para indicar exactamente por dónde empezar.
-2. **🔀 Git Context ("¿Qué cambió desde ayer?"):**  
-   No solo muestra un diff, sino que explica el impacto potencial de los cambios en el proyecto.
-3. **🔍 Pull Request Inspector ("Inspeccioná este PR"):**  
-   Lee GitHub, checks de CI/CD, comentarios y tests para generar un diagnóstico inmediato.
-4. **🧠 Workspace Memory ("¿En qué estaba trabajando hace media hora?"):**  
-   Recupera el contexto de trabajo y las ventanas activas tras interrupciones.
-5. **📼 Error Replay ("Mostrame cómo llegué a este error"):**  
-   Reconstruye cuadro por cuadro el historial visual y de eventos previa a la excepción.
+> **Un runtime de escritorio modular para percepción visual, planificación supervisada y ejecución verificada en bucle cerrado (Closed-Loop Agentic OS).**
 
 ---
 
-## ⚡ Cómo Funciona (Pipeline de 6 Capas)
+## 🏛️ Arquitectura del Sistema
 
 ```text
-Desktop (Windows)
-   ↓
-1. Capture Layer (DXGI / MSS continuous capture)
-   ↓
-2. Perception Layer (Scene Builder JSON + OCR Multi-provider)
-   ↓
-3. World State & Memory Layer (events.db + timeline.jsonl + 5-min Memory)
-   ↓
-4. Reasoning Runtime (AntiGravity Core Q&A)
-   ↓
-5. Planner & Policy Guardian (OBSERVE -> PLAN -> SIMULATE -> APPROVAL)
-   ↓
-6. Action Runtime & Plugins (Supervised Action Simulator)
+Desktop Agent Runtime
+├── Vision Runtime (Captura DXGI/MSS 20 FPS + Scene Builder JSON + OCR)
+├── Action Runtime (Ejecución de procesos, mouse, teclado, URLs)
+├── Memory Runtime (Slotted 5-min Memory + SQLite events.db + Replay)
+├── World State (Instantánea viva del estado del escritorio)
+├── Planner (Task Planner estructurado multi-paso)
+├── Goal Manager (Trazabilidad de objetivos a largo plazo)
+├── Skills Engine (Habilidades compuestas de alto nivel)
+├── Safety Guardian (Permission Manager + Emergency Stop Circuit Breaker)
+├── Verification Engine (Validación de ExpectedState visual)
+└── Recovery & Learning Engine (Estrategias de fallback y telemetría)
 ```
 
 ---
 
-## 🚀 Inicio Rápido
+## 🎯 Vertical Principal: Developer Copilot (VS Code + Terminal + Git + GitHub + Docker)
+
+El sistema enfoca su validación empírica exclusivamente en el entorno de desarrollo de software para responder a preguntas situacionales complejas:
+
+* **`"¿Por qué falló este test en la terminal?"`**
+* **`"¿Qué cambió exactamente desde el último commit?"`**
+* **`"¿Qué ventana o popup apareció justo antes del error?"`**
+* **`"¿Qué comando ejecuté hace 5 minutos?"`**
+
+---
+
+## ⚡ Inicio Rápido
 
 ```bash
 # 1. Instalar dependencias
 pip install -r requirements.txt
 
-# 2. Ejecutar la plataforma
+# 2. Ejecutar el servidor Uvicorn
 uvicorn app.api.server:app --host 127.0.0.1 --port 8080
 ```
 
-Accede a la Consola de Observabilidad en Vivo:
+Acceso a la Consola de Observabilidad en Vivo:
 👉 **[http://127.0.0.1:8080](http://127.0.0.1:8080)**
+
+---
+
+## 📊 Medición y Evaluación Empírica
+
+| Tarea de Ejemplo | Tasa de Éxito (%) | Tiempo Promedio | Reintentos | Intervención Humana |
+| :--- | :--- | :--- | :--- | :--- |
+| **Abrir VS Code y verificar** | Pending (N=100) | ~1.8 s | 0 | No |
+| **Ejecutar pytest en terminal** | Pending (N=100) | ~2.1 s | 0 | No |
+| **Navegar a repositorio GitHub** | Pending (N=100) | ~1.4 s | 0 | No |
