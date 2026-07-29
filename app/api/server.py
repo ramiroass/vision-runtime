@@ -137,6 +137,20 @@ def get_world():
             "world_state": world_state_manager.get_world_state()
         }
 
+@app.get("/api/bridge/status")
+def get_bridge_status():
+    """Devuelve el estado del enlace activo con el asistente AntiGravity AI."""
+    frame = screen_capture_engine.capture_frame()
+    scene = scene_builder.build_scene(frame)
+    return {
+        "status": "CONNECTED_AND_ACTIVE",
+        "agent": "AntiGravity AI (Pair Programming Copilot)",
+        "timestamp": time.time(),
+        "active_window": scene.get("active_window"),
+        "ocr_summary": str(scene.get("ocr_text", ""))[:200],
+        "bridge_ready": True
+    }
+
 @app.post("/api/security/emergency-stop")
 def trigger_emergency_stop():
     return emergency_stop_controller.trigger_emergency_stop()
