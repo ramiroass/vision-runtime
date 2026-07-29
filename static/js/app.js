@@ -3,7 +3,7 @@
 // ==========================================================================
 
 let isAutonomous = false;
-let currentGoal = "";
+let currentPlan = null;
 
 document.addEventListener("DOMContentLoaded", () => {
   startMetricsPolling();
@@ -100,7 +100,6 @@ async function handlePlannerSubmit(e) {
   const goal = input.value.trim();
   if (!goal) return;
 
-  currentGoal = goal;
   const output = document.getElementById("planner-output");
   output.textContent = "⏳ Generando plan seguro estructurado...";
 
@@ -111,8 +110,8 @@ async function handlePlannerSubmit(e) {
       body: JSON.stringify({ goal })
     });
     if (res.ok) {
-      const plan = await res.json();
-      output.textContent = JSON.stringify(plan, null, 2);
+      currentPlan = await res.json();
+      output.textContent = JSON.stringify(currentPlan, null, 2);
       input.value = "";
 
       const approveBtn = document.getElementById("btn-approve-execute");
@@ -123,94 +122,49 @@ async function handlePlannerSubmit(e) {
   }
 }
 
-// Extrae dinámicamente sitios web o nombres de programas sin harcodear
-function parseGoalToActions(goalText) {
-  const goalLower = goalText.toLowerCase();
-  const actions = [];
-
-  // Palabras clave ignorables
-  const cleanText = goalLower
-    .replace(/abri|abrir|anda a|ir a|buscar|navega a|entrar a|open/g, "")
-    .trim();
-
-  // Buscar URLs o nombres de dominios/servicios
-  const words = cleanText.split(/\s+y\s+|\s+e\s+|,|;/);
-
-  for (let w of words) {
-    let token = w.trim();
-    if (!token) continue;
-
-    if (token.includes("facebook")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.facebook.com" });
-    } else if (token.includes("youtube")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.youtube.com" });
-    } else if (token.includes("instagram")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.instagram.com" });
-    } else if (token.includes("twitter") || token.includes("x.com")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.twitter.com" });
-    } else if (token.includes("reddit")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.reddit.com" });
-    } else if (token.includes("twitch")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.twitch.tv" });
-    } else if (token.includes("deeeep") || token.includes("deeep")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://deeeep.io" });
-    } else if (token.includes("google")) {
-      actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.google.com" });
-    } else if (token.includes(".") || token.startsWith("http")) {
-      let url = token.startsWith("http") ? token : "https://" + token;
-      actions.push({ action_type: "OPEN_PROCESS", target: "start " + url });
-    } else {
-      // Intento dinámico genérico para sitios o procesos
-      let url = `https://www.${token}.com`;
-      actions.push({ action_type: "OPEN_PROCESS", target: "start " + url });
-    }
-  }
-
-  if (actions.length === 0) {
-    actions.push({ action_type: "OPEN_PROCESS", target: "start https://www.google.com" });
-  }
-
-  return actions;
-}
-
-// Aprobar y Ejecutar Secuencia Completa Dinámica en PC
+// Aprobar y Ejecutar Secuencia desde el Plan Backend
 async function handleApproveAndExecute() {
+  if (!currentPlan) return;
+
   const output = document.getElementById("planner-output");
   const approveBtn = document.getElementById("btn-approve-execute");
   approveBtn.textContent = "⏳ Ejecutando en PC...";
 
-  const actionsToRun = parseGoalToActions(currentGoal);
-  let executionResults = [];
+  const actionTarget = currentPlan.final_command || `start ${currentPlan.resolved_url}`;
+  const actionType = currentPlan.action_type || "OPEN_PROCESS";
 
-  for (let act of actionsToRun) {
-    try {
-      const res = await fetch("/api/actions/authorize-execute", {
+  try {
+    const res = await fetch("/api/actions/authorize-execute", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action_type: actionType,
+        target: actionTarget,
+        auth_token: "USER_APPROVED_TOKEN"
+      })
+    });
+
+    if (res.ok) {
+      const result = await res.json();
+      output.textContent = `✅ TRACE DE EJECUCIÓN SINCRO EN PC:\n` +
+        `INPUT DEL USUARIO: ${currentPlan.input_user}\n` +
+        `URL RESUELTA:     ${currentPlan.resolved_url}\n` +
+        `COMANDO FINAL:    ${currentPlan.final_command}\n\n` +
+        JSON.stringify(result, null, 2);
+
+      approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
+      approveBtn.style.display = "none";
+
+      fetch("/api/intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action_type: act.action_type,
-          target: act.target,
-          auth_token: "USER_APPROVED_TOKEN"
-        })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        executionResults.push(data);
-      }
-    } catch (err) {
-      console.error("Error ejecutando paso:", err);
+        body: JSON.stringify({ description: `Ejecutado '${currentPlan.input_user}' -> ${currentPlan.resolved_url}`, status: "SUCCESS" })
+      }).then(() => fetchIntents());
     }
+  } catch (err) {
+    output.textContent = "Error ejecutando acción en PC.";
+    approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
   }
-
-  output.textContent = `✅ SECUENCIA DINÁMICA COMPLETADA EN PC:\n` + JSON.stringify(executionResults, null, 2);
-  approveBtn.textContent = "✅ APROBAR Y EJECUTAR EN PC";
-  approveBtn.style.display = "none";
-
-  fetch("/api/intent", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ description: `Ejecutado dinámicamente '${currentGoal}' en PC`, status: "SUCCESS" })
-  }).then(() => fetchIntents());
 }
 
 // OCR Provider Selector
