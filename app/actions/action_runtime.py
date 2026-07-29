@@ -43,9 +43,28 @@ class ActionRuntime:
 
         try:
             if clean_target.startswith("http://") or clean_target.startswith("https://"):
-                # Abrir URL en el navegador predeterminado de Windows
-                webbrowser.open(clean_target, new=2)
+                # El servidor NO abre el navegador directamente (falla desde procesos daemon).
+                # Devuelve la URL al frontend JS, que ejecuta window.open(url).
                 result_message = f"Navegador abierto exitosamente en la URL '{clean_target}'."
+
+                record = {
+                    "timestamp": time.time(),
+                    "action_type": action_type,
+                    "target": clean_target,
+                    "status": "EXECUTED",
+                    "message": result_message
+                }
+                self.action_history.append(record)
+
+                return {
+                    "success": True,
+                    "executed": True,
+                    "action_type": action_type,
+                    "target": clean_target,
+                    "message": result_message,
+                    "client_should_open": True,
+                    "open_url": clean_target
+                }
 
             elif action_type in ["OPEN_PROCESS", "NAVIGATE_URL"]:
                 if os.name == 'nt':

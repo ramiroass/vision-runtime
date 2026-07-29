@@ -167,6 +167,12 @@ async function handleApproveAndExecute() {
 
     if (res.ok) {
       const result = await res.json();
+
+      // Si el servidor indica que el cliente debe abrir la URL (porque el daemon no puede)
+      if (result.client_should_open && result.open_url) {
+        window.open(result.open_url, "_blank");
+      }
+
       output.textContent = `✅ EJECUCIÓN APROBADA Y COMPLETADA EN PC:\n` +
         `INPUT DEL USUARIO: ${currentPlan.input_user}\n` +
         `URL RESUELTA:     ${currentPlan.resolved_url}\n` +
