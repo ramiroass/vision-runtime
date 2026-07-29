@@ -21,7 +21,9 @@ class AntiGravityEngine:
         active_app = scene_context.get("active_app", "Sistema")
         scene_graph = scene_context.get("scene_graph", {})
         ocr_text = scene_context.get("ocr_text", "")
-        confidence = scene_context.get("confidence", {}).get("overall", 0.94)
+
+        conf_data = scene_context.get("confidence", {})
+        confidence_val = conf_data.get("overall_confidence", 0.94) if isinstance(conf_data, dict) else 0.94
 
         history = five_minute_memory.get_history()
         snapshots_count = len(history)
@@ -53,12 +55,12 @@ class AntiGravityEngine:
                 else:
                     answer = f"🧠 [LLM Inferencia] No se detectan errores en '{active_window}'. Aplicación limpia."
             else:
-                answer = f"🧠 [LLM Inferencia] Razonando sobre '{active_window}': Se registran {snapshots_count} eventos en 5 min. Confianza: {int(confidence*100)}%."
+                answer = f"🧠 [LLM Inferencia] Razonando sobre '{active_window}': Se registran {snapshots_count} eventos en 5 min. Confianza: {int(confidence_val*100)}%."
 
         proposed_plan = [
             {"step": 1, "action": "INTENT_ROUTER", "target": query_type, "status": "COMPLETED"},
             {"step": 2, "action": "SCENE_GRAPH_LOOKUP" if query_type == "DETERMINISTIC_WORLD_STATE" else "LLM_INFERENCE", "target": active_window, "status": "COMPLETED"},
-            {"step": 3, "action": "RESPONSE_SYNTHESIS", "target": f"Respuesta determinista generada", "status": "COMPLETED"}
+            {"step": 3, "action": "RESPONSE_SYNTHESIS", "target": "Respuesta determinista generada", "status": "COMPLETED"}
         ]
 
         return {
