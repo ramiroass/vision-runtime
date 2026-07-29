@@ -12,7 +12,7 @@ class SceneBuilder:
         if frame is None:
             frame = screen_capture_engine.capture_frame()
 
-        active_window_info = window_detector.get_active_window_info()
+        active_window_info = window_detector.get_active_window()
         ocr_result = ocr_engine.extract_text(frame) if frame is not None else {"text": ""}
         ui_elements = ui_detector.detect_components(frame) if frame is not None else []
 
