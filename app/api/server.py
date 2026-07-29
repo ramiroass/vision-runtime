@@ -156,6 +156,25 @@ def get_bridge_status():
 def trigger_emergency_stop():
     return emergency_stop_controller.trigger_emergency_stop()
 
+from app.skills.demonstration_learning import demonstration_engine
+
+@app.post("/api/demo/start-recording")
+def start_demo_recording():
+    """Inicia la grabación de una demostración del usuario."""
+    return demonstration_engine.start_recording()
+
+@app.post("/api/demo/stop-and-learn")
+def stop_demo_and_learn(request: Dict[str, Any]):
+    """Detiene la grabación y sintetiza una Habilidad Reutilizable (Skill)."""
+    skill_name = request.get("skill_name", "Macro_Usuario")
+    return demonstration_engine.stop_recording_and_learn(skill_name)
+
+@app.post("/api/demo/replay")
+def replay_demo_skill(request: Dict[str, Any]):
+    """Repite la secuencia aprendida en la PC del usuario."""
+    target_url = request.get("target_url", "https://www.facebook.com")
+    return demonstration_engine.replay_learned_skill(target_url)
+
 @app.post("/api/security/reset-stop")
 def reset_emergency_stop():
     return emergency_stop_controller.reset_emergency_stop()
