@@ -1,66 +1,63 @@
-# 🏗️ Arquitectura Completa: Desktop Agentic OS (Vision Runtime Platform)
+# 🏛️ Arquitectura: Agent Runtime Platform Infrastructure (v1.0)
 
-> **Filosofía Fundamental:**  
-> El Modelo de Lenguaje (LLM) NO es la aplicación entera; es un motor modular de razonamiento dentro de un Sistema Operativo para Agentes de Escritorio.
+> **Principios Fundamentales:**  
+> Los Agentes Cambian (`Developer Agent`, `Browser Agent`, `Terminal Agent`).  
+> La Plataforma Permanece (`Perception`, `Planning`, `Verified Execution`, `Knowledge`).
 
 ---
 
-## 🏛️ El Pipeline de 10 Pasos Desacoplado
+## 🏗️ La Arquitectura en Capas Completa
 
 ```text
-                 Usuario
-                    │
-          Lenguaje natural
-                    │
-                    ▼
-            Goal Manager (¿Qué quiere lograr?)
-                    │
-                    ▼
-             Task Planner (¿Cómo lo hago?)
-                    │
-                    ▼
-           Skill / Capability (¿Qué sé hacer?)
-                    │
-                    ▼
-            Action Runtime (mouse, teclado, procesos)
-                    │
-                    ▼
-           Vision Runtime (¿Qué pasó realmente?)
-                    │
-                    ▼
-          Verification Engine (¿Coincide con lo esperado?)
-                    │
-        Sí ─────────┴──────── No
-                    │                │
-                    ▼                ▼
-             siguiente paso    Recovery Engine (intenta otra estrategia)
-                                     │
-                                     ▼
-                              Learning Engine
+                  Agentes de Aplicación
+      ┌─────────────────┬─────────────────┬─────────────────┐
+      │ Developer Agent │  Browser Agent  │ Terminal Agent  │
+      └────────┬────────┴────────┬────────┴────────┬────────┘
+               │                 │                 │
+               ▼                 ▼                 ▼
+─────────────────────────────────────────────────────────────────
+                   Agent Runtime Platform
+─────────────────────────────────────────────────────────────────
+  ├── 1. Intent Router (Enrutador de 5 Vías: UI, Memoria, Plan, Acción, LLM)
+  ├── 2. Goal Manager & Task Planner (Planificación Estructurada)
+  ├── 3. Simulation Engine (Predicción de Escenas y Riesgo)
+  ├── 4. Verification & Recovery Engine (Bucle Cerrado ExpectedState)
+  ├── 5. Memory Runtime (Memoria 5-min + SQLite)
+  ├── 6. Knowledge Runtime (Conocimiento Persistente L.P.)
+  ├── 7. World State & Scene Graph (Contrato de Percepción Estable)
+  ├── 8. Vision Runtime (DXGI/MSS 20 FPS + OCR)
+  └── 9. Action Runtime (Ejecución Supervisada de Procesos y UI)
+─────────────────────────────────────────────────────────────────
 ```
 
 ---
 
-## 🧩 La Matriz de Decisión de Capacidades
+## 🧩 El Contrato Estable de SceneGraph
 
-```text
-Objetivo del Usuario
-  │
-  ├── ¿Existe Plugin Especializado? (ej. VS Code Plugin)
-  │     └── SÍ ➔ Ejecutar vía Plugin Especializado (Confianza 96%, Menor Latencia)
-  │
-  └── NO ➔ Usar Capability Genérica de Escritorio (Detección UI + Fallback OCR)
+```json
+{
+  "windows": [{"title": "VS Code", "process": "Code.exe", "focused": true}],
+  "browser": {
+    "tabs": [{"index": 0, "title": "Vision Runtime", "active": true}],
+    "url": "http://127.0.0.1:8080"
+  },
+  "terminal": {"cwd": "C:/vision_runtime", "last_command": "pytest", "status": "running"},
+  "buttons": ["Run", "Stop", "Commit"],
+  "inputs": [],
+  "notifications": [],
+  "dialogs": []
+}
 ```
 
 ---
 
-## 🔄 El Bucle Continuo Agentic
+## 🧠 Knowledge Runtime vs Memory Runtime
 
-$$\text{OBSERVE} \longrightarrow \text{PLAN} \longrightarrow \text{ACT} \longrightarrow \text{VERIFY} \longrightarrow \text{LEARN} \longrightarrow \text{OBSERVE}$$
+* **`Memory Runtime` (Corto Plazo):** *"Hace 2 minutos la terminal arrojó una excepción."*
+* **`Knowledge Runtime` (Largo Plazo):** *"La semana pasada este mismo error de Dockerfile se solucionó ajustando los permisos en el contenedor."*
 
-1. **`Vision Runtime` (Ojos):** Observación continua a 20 FPS (DXGI / MSS).
-2. **`Action Runtime` (Manos):** Brazo robótico para mouse, teclado y procesos.
-3. **`Memory Runtime` (Memoria):** Búfer rodante de 5 min y SQLite.
-4. **`Planner` (Cerebro):** Descomposición de intenciones en Habilidades Compuestas (`Skills`).
-5. **`Goal Manager` (Objetivo):** Control de metas a largo plazo.
-6. **`LLM (AntiGravity Core)`:** Motor de razonamiento modular reemplazable (Gemini, Claude, GPT).
+---
+
+## 🔄 El Bucle Continuo de la Plataforma
+
+$$\text{OBSERVE} \longrightarrow \text{SIMULATE} \longrightarrow \text{PLAN} \longrightarrow \text{ACT} \longrightarrow \text{VERIFY} \longrightarrow \text{LEARN}$$
