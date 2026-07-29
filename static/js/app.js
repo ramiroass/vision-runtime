@@ -1,5 +1,5 @@
 // ==========================================================================
-// Vision Runtime - Application Logic (Sprint 5 & Dynamic Multi-Step Execution)
+// Vision Runtime - Application Logic (Sprint 5 & Action Sync)
 // ==========================================================================
 
 let isAutonomous = false;
@@ -100,6 +100,11 @@ async function handlePlannerSubmit(e) {
   const goal = input.value.trim();
   if (!goal) return;
 
+  generateAndDisplayPlan(goal);
+  input.value = "";
+}
+
+async function generateAndDisplayPlan(goalText) {
   const output = document.getElementById("planner-output");
   output.textContent = "⏳ Generando plan seguro estructurado...";
 
@@ -107,12 +112,11 @@ async function handlePlannerSubmit(e) {
     const res = await fetch("/api/planner/plan", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ goal })
+      body: JSON.stringify({ goal: goalText })
     });
     if (res.ok) {
       currentPlan = await res.json();
       output.textContent = JSON.stringify(currentPlan, null, 2);
-      input.value = "";
 
       const approveBtn = document.getElementById("btn-approve-execute");
       approveBtn.style.display = "inline-flex";
@@ -255,7 +259,7 @@ async function handleIntentSubmit(e) {
   }
 }
 
-// AntiGravity Question
+// AntiGravity Question + Auto Router a Task Planner si es una Orden de Acción
 async function handleQuestionSubmit(e) {
   e.preventDefault();
   const input = document.getElementById("question-input");
@@ -264,6 +268,12 @@ async function handleQuestionSubmit(e) {
 
   const output = document.getElementById("reasoning-output");
   output.textContent = "🤔 AntiGravity procesando contexto...";
+
+  // Si la pregunta es una orden de acción (ej. "abri...", "anda a..."), disparar también el Task Planner
+  const qLower = question.toLowerCase();
+  if (qLower.includes("abri") || qLower.includes("abrir") || qLower.includes("anda a") || qLower.includes("ir a")) {
+    generateAndDisplayPlan(question);
+  }
 
   try {
     const res = await fetch("/api/question", {
