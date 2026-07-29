@@ -1,5 +1,5 @@
 // ==========================================================================
-// Vision Runtime - Application Logic (Sprint 5 & Action Sync)
+// Vision Runtime - Application Logic (Sprint 5 & Unified Effective Interface)
 // ==========================================================================
 
 let isAutonomous = false;
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("intent-form").addEventListener("submit", handleIntentSubmit);
   document.getElementById("question-form").addEventListener("submit", handleQuestionSubmit);
-  document.getElementById("planner-form").addEventListener("submit", handlePlannerSubmit);
+  document.getElementById("planner-form").addEventListener("submit", handleUnifiedSubmit);
   document.getElementById("btn-approve-execute").addEventListener("click", handleApproveAndExecute);
   document.getElementById("ocr-selector").addEventListener("change", handleOCRChange);
   document.getElementById("btn-replay").addEventListener("click", handleReplayFetch);
@@ -41,7 +41,6 @@ function startMetricsPolling() {
       document.getElementById("meter-latency").textContent = `${data.latency_ms} ms`;
       document.getElementById("meter-ocr").textContent = data.ocr_provider || "FastOCR";
       document.getElementById("meter-memory").textContent = `${data.memory_snapshots_count || 0} Cuadros`;
-      document.getElementById("meter-ram").textContent = `${data.ram_usage_mb} MB`;
 
       isAutonomous = data.autonomous;
       const autoMeter = document.getElementById("meter-autonomous");
@@ -93,36 +92,54 @@ async function handleToggleAutonomous() {
   }
 }
 
-// Task Planner Submit
-async function handlePlannerSubmit(e) {
+// Handler Único 100% Efectivo (Auto-router para Preguntas vs Acciones)
+async function handleUnifiedSubmit(e) {
   e.preventDefault();
   const input = document.getElementById("planner-input");
-  const goal = input.value.trim();
-  if (!goal) return;
+  const query = input.value.trim();
+  if (!query) return;
 
-  generateAndDisplayPlan(goal);
-  input.value = "";
-}
-
-async function generateAndDisplayPlan(goalText) {
   const output = document.getElementById("planner-output");
-  output.textContent = "⏳ Generando plan seguro estructurado...";
+  const approveBtn = document.getElementById("btn-approve-execute");
+  approveBtn.style.display = "none";
+  output.textContent = "⏳ Procesando consulta...";
 
-  try {
-    const res = await fetch("/api/planner/plan", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ goal: goalText })
-    });
-    if (res.ok) {
-      currentPlan = await res.json();
-      output.textContent = JSON.stringify(currentPlan, null, 2);
+  const qLower = query.toLowerCase();
+  const isActionCommand = qLower.includes("abri") || qLower.includes("abrir") || qLower.includes("anda a") || qLower.includes("ir a") || qLower.includes("ejecutar");
 
-      const approveBtn = document.getElementById("btn-approve-execute");
-      approveBtn.style.display = "inline-flex";
+  if (isActionCommand) {
+    // Generar Plan de Acción
+    try {
+      const res = await fetch("/api/planner/plan", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ goal: query })
+      });
+      if (res.ok) {
+        currentPlan = await res.json();
+        output.textContent = JSON.stringify(currentPlan, null, 2);
+        input.value = "";
+        approveBtn.style.display = "inline-flex";
+      }
+    } catch (err) {
+      output.textContent = "Error generando plan de acción.";
     }
-  } catch (err) {
-    output.textContent = "Error generando plan.";
+  } else {
+    // Consulta Perceptiva / 5-Way Router
+    try {
+      const res = await fetch("/api/question", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: query })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        output.textContent = `${data.answer}\n\nPlan Propuesto:\n` + data.proposed_plan.map(p => `  • Step ${p.step}: ${p.action} -> ${p.target} [${p.status}]`).join("\n");
+        input.value = "";
+      }
+    } catch (err) {
+      output.textContent = "Error procesando consulta.";
+    }
   }
 }
 
@@ -150,7 +167,7 @@ async function handleApproveAndExecute() {
 
     if (res.ok) {
       const result = await res.json();
-      output.textContent = `✅ TRACE DE EJECUCIÓN SINCRO EN PC:\n` +
+      output.textContent = `✅ EJECUCIÓN APROBADA Y COMPLETADA EN PC:\n` +
         `INPUT DEL USUARIO: ${currentPlan.input_user}\n` +
         `URL RESUELTA:     ${currentPlan.resolved_url}\n` +
         `COMANDO FINAL:    ${currentPlan.final_command}\n\n` +
@@ -259,7 +276,7 @@ async function handleIntentSubmit(e) {
   }
 }
 
-// AntiGravity Question + Auto Router a Task Planner si es una Orden de Acción
+// AntiGravity Question Submit
 async function handleQuestionSubmit(e) {
   e.preventDefault();
   const input = document.getElementById("question-input");
@@ -268,12 +285,6 @@ async function handleQuestionSubmit(e) {
 
   const output = document.getElementById("reasoning-output");
   output.textContent = "🤔 AntiGravity procesando contexto...";
-
-  // Si la pregunta es una orden de acción (ej. "abri...", "anda a..."), disparar también el Task Planner
-  const qLower = question.toLowerCase();
-  if (qLower.includes("abri") || qLower.includes("abrir") || qLower.includes("anda a") || qLower.includes("ir a")) {
-    generateAndDisplayPlan(question);
-  }
 
   try {
     const res = await fetch("/api/question", {

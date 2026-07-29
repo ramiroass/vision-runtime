@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vision Runtime - Consola de Observabilidad de Escritorio</title>
+  <title>Vision Runtime - Consola de Observabilidad & Agent OS</title>
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
         <span class="logo">👁️</span>
         <div class="brand-info">
           <h1>Vision Runtime</h1>
-          <span class="badge badge-cyan">Developer Vision Copilot v1.0</span>
+          <span class="badge badge-cyan">Agent Runtime Platform v1.0</span>
         </div>
       </div>
 
@@ -40,6 +40,10 @@
         <div class="stat-card">
           <span class="lbl">Memoria (5 Min)</span>
           <span class="val highlight-green" id="meter-memory">0 Cuadros</span>
+        </div>
+        <div class="stat-card">
+          <span class="lbl">IA Enlazada</span>
+          <span class="val highlight-green" id="meter-bridge">🟢 AntiGravity Bridge</span>
         </div>
         <div class="stat-card">
           <span class="lbl">Seguridad</span>
@@ -72,17 +76,17 @@
         </div>
       </main>
 
-      <!-- Panel Derecho: Scene Description JSON & Log de Intenciones -->
+      <!-- Panel Derecho: Task Planner, Scene Description JSON & AntiGravity Q&A -->
       <aside class="telemetry-panel glass-card">
-        <!-- Task Planner Bar -->
+        <!-- Unified Command & Task Planner Input -->
         <div class="panel-section">
-          <h3>🗺️ Task Planner de Asistencia</h3>
+          <h3>🚀 Control y Consulta de Agente (100% Efectivo)</h3>
           <form id="planner-form" class="intent-input-row">
-            <input type="text" id="planner-input" placeholder="Objetivo (ej. 'abri otro chrome')" required>
-            <button type="submit" class="btn btn-primary btn-sm">Generar Plan</button>
+            <input type="text" id="planner-input" placeholder="Pregunta o comando (ej. 'abri facebook', 'que ves?')" required>
+            <button type="submit" class="btn btn-primary btn-sm">Enviar</button>
           </form>
-          <div class="json-box" id="planner-output" style="max-height:100px;">
-            Sin plan generado.
+          <div class="json-box" id="planner-output" style="max-height:120px;">
+            Ingresa cualquier consulta sobre tu pantalla u orden para tu PC...
           </div>
           <div style="margin-top:8px; display:flex; justify-content:flex-end;">
             <button id="btn-approve-execute" class="btn btn-success btn-sm" style="display:none;">✅ APROBAR Y EJECUTAR EN PC</button>
@@ -91,34 +95,34 @@
 
         <!-- Scene Description JSON -->
         <div class="panel-section">
-          <h3>🧩 Scene Description (Capa 2)</h3>
+          <h3>🧩 Scene Description & SceneGraph (Capa 2)</h3>
           <div class="json-box" id="scene-json">
-            Cargando descripción de escena...
+            Cargando descripción de escena y SceneGraph...
+          </div>
+        </div>
+
+        <!-- Consultar AntiGravity Core -->
+        <div class="panel-section">
+          <h3>🧠 Inspección AntiGravity Core (Enrutador de 5 Vías)</h3>
+          <form id="question-form" class="intent-input-row">
+            <input type="text" id="question-input" placeholder="Razonamiento sobre pantalla (ej. '¿por qué falló pytest?')" required>
+            <button type="submit" class="btn btn-secondary btn-sm">Razonar</button>
+          </form>
+          <div class="json-box" id="reasoning-output" style="max-height:90px;">
+            Sin consultas de razonamiento activas.
           </div>
         </div>
 
         <!-- Log de Intenciones -->
         <div class="panel-section">
-          <h3>🎯 Intenciones del Usuario (Capa 3)</h3>
-          <form id="intent-form" class="intent-input-row">
-            <input type="text" id="intent-input" placeholder="Registrar intención (ej. 'Inicié sesión')" required>
-            <button type="submit" class="btn btn-primary btn-sm">Log Intención</button>
-          </form>
+          <h3>📜 Historial de Intenciones</h3>
           <div class="intents-list" id="intents-list">
-            <!-- Inyectado dinámicamente -->
+            Cargando historial de intenciones...
           </div>
-        </div>
-
-        <!-- AntiGravity Reasoning Engine Bar -->
-        <div class="panel-section">
-          <h3>🧠 Consultar Motor AntiGravity (Capa 4)</h3>
-          <form id="question-form" class="intent-input-row">
-            <input type="text" id="question-input" placeholder="Pregunta sobre la pantalla..." required>
-            <button type="submit" class="btn btn-success btn-sm">Consultar</button>
+          <form id="intent-form" class="intent-input-row" style="margin-top:8px;">
+            <input type="text" id="intent-input" placeholder="Registrar intención manual..." required>
+            <button type="submit" class="btn btn-secondary btn-sm">Registrar</button>
           </form>
-          <div class="reasoning-box" id="reasoning-output">
-            Esperando consulta del usuario...
-          </div>
         </div>
       </aside>
     </div>
