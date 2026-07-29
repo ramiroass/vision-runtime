@@ -16,14 +16,17 @@ class AntiGravityEngine:
         question_lower = question.lower()
         answer = ""
 
-        # Detección específica de pestañas en navegadores
-        if "pestaña" in question_lower or "tab" in question_lower:
-            # Extraer líneas de texto OCR que parecen nombres de pestañas
-            lines = [line.strip() for line in ocr_text.split("\n") if len(line.strip()) > 3]
-            tabs_detected = lines[:4] if lines else [active_window]
+        # Detección específica de la primera pestaña / título activo
+        if "primera pestaña" in question_lower or "primera tab" in question_lower:
+            # Extraer el título de la ventana activa o la primera línea limpia del OCR
+            title_clean = active_window.split("-")[0].strip() if "-" in active_window else active_window
+            answer = f"La primera pestaña abierta en tu navegador es '{title_clean}' (Ventana completa: '{active_window}')."
 
+        elif "pestaña" in question_lower or "tab" in question_lower:
+            lines = [line.strip() for line in ocr_text.split("\n") if len(line.strip()) > 3]
+            tabs_detected = lines[:3] if lines else [active_window]
             tabs_formatted = ", ".join([f"'{t}'" for t in tabs_detected])
-            answer = f"Pestañas y elementos superiores detectados en '{active_window}': {tabs_formatted}."
+            answer = f"Pestañas y títulos superiores detectados en '{active_window}': {tabs_formatted}."
 
         elif "error" in question_lower or "fallo" in question_lower:
             if "error" in ocr_text.lower() or "failed" in ocr_text.lower():
