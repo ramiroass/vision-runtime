@@ -33,28 +33,33 @@ class AntiGravityEngine:
         self.api_key = os.getenv("GEMINI_API_KEY", "")
 
     def call_gemini_api(self, prompt: str) -> str:
-        """Llama a la API en la nube de Google Gemini en tiempo real si hay API Key configurada."""
+        """Llama a la API en la nube de Google Gemini en tiempo real si hay GEMINI_API_KEY configurada."""
         if not self.api_key:
             return ""
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={self.api_key}"
-        headers = {"Content-Type": "application/json"}
-        payload = {
-            "contents": [{"parts": [{"text": prompt}]}]
-        }
+        models_to_try = [
+            "gemini-2.0-flash",
+            "gemini-2.5-flash-lite",
+            "gemini-1.5-flash"
+        ]
 
-        try:
-            with httpx.Client(timeout=10.0) as client:
-                res = client.post(url, json=payload, headers=headers)
-                if res.status_code == 200:
-                    data = res.json()
-                    candidates = data.get("candidates", [])
-                    if candidates:
-                        parts = candidates[0].get("content", {}).get("parts", [])
-                        if parts:
-                            return parts[0].get("text", "").strip()
-        except Exception as e:
-            print(f"[GEMINI API ERROR] {e}")
+        payload = {"contents": [{"parts": [{"text": prompt}]}]}
+        headers = {"Content-Type": "application/json"}
+
+        for model in models_to_try:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={self.api_key}"
+            try:
+                with httpx.Client(timeout=8.0) as client:
+                    res = client.post(url, json=payload, headers=headers)
+                    if res.status_code == 200:
+                        data = res.json()
+                        candidates = data.get("candidates", [])
+                        if candidates:
+                            parts = candidates[0].get("content", {}).get("parts", [])
+                            if parts:
+                                return parts[0].get("text", "").strip()
+            except Exception as e:
+                print(f"[GEMINI API ERROR {model}] {e}")
 
         return ""
 
@@ -103,7 +108,6 @@ class AntiGravityEngine:
 
         # RUTA 5: Conversacional & Razonamiento con Gemini API
         else:
-            # Intento de llamada a Gemini API en tiempo real
             prompt_system = (
                 f"Eres AntiGravity AI, un copilot de escritorio. El usuario pregunta: '{question}'. "
                 f"Contexto actual del escritorio: Ventana activa '{active_window}' ({active_app}). "
@@ -112,7 +116,7 @@ class AntiGravityEngine:
             ai_response = self.call_gemini_api(prompt_system)
 
             if ai_response:
-                answer = f"🧠 [Gemini API en Vivo] {ai_response}"
+                answer = f"🧠 [Gemini Cloud API] {ai_response}"
             elif question_lower in ["hola", "buenas", "hola como estas", "hola!", "hola anti"]:
                 answer = f"👋 ¡Hola! Soy **AntiGravity AI**, tu asistente enlazado en tiempo real. Estoy observando tu aplicación activa ('{active_window}') y listo para ayudarte a ejecutar acciones, analizar errores o responder tus dudas sobre tu escritorio."
             elif "error" in question_lower or "fallo" in question_lower:
@@ -132,7 +136,7 @@ class AntiGravityEngine:
             "scene_graph": scene_graph,
             "proposed_plan": [
                 {"step": 1, "action": "INTENT_CLASSIFICATION", "target": intent, "status": "COMPLETED"},
-                {"step": 2, "action": "GEMINI_API_DISPATCH" if self.api_key else "LOCAL_REASONING_DISPATCH", "target": "AntiGravity Engine", "status": "COMPLETED"},
+                {"step": 2, "action": "GEMINI_CLOUD_API" if self.api_key else "LOCAL_REASONING_DISPATCH", "target": "AntiGravity Engine", "status": "COMPLETED"},
                 {"step": 3, "action": "RESPONSE_SYNTHESIS", "target": answer[:40], "status": "COMPLETED"}
             ]
         }
