@@ -1,6 +1,5 @@
 from typing import Dict, Any, List
 from app.memory.session_memory import five_minute_memory
-from app.actions.action_runtime import action_runtime
 
 class IntentRouter5Way:
     @staticmethod
@@ -11,8 +10,8 @@ class IntentRouter5Way:
         if any(k in q for k in ["abri ", "abrir", "anda a", "ir a", "ejecutar", "lanzar"]):
             return "ACTION_QUERY"
 
-        # 2. UI Structural Query
-        if any(k in q for k in ["pestaña", "tab", "ventana", "programa", "activo", "proceso", "título", "titulo", "botón", "boton"]):
+        # 2. UI Structural Query (Incluye "qué ves", "pantalla", "pestaña", "ventana")
+        if any(k in q for k in ["pestaña", "tab", "ventana", "programa", "activo", "proceso", "título", "titulo", "botón", "boton", "ves", "pantalla", "mira"]):
             return "UI_STRUCTURAL_QUERY"
 
         # 3. History Query
@@ -50,7 +49,9 @@ class AntiGravityEngine:
         # RUTA 1: UI Structural Query -> SceneGraph
         if intent == "UI_STRUCTURAL_QUERY":
             tabs = scene_graph.get("tabs", [])
+            buttons = scene_graph.get("buttons", [])
             q_lower = question.lower()
+
             if "primera pestaña" in q_lower or "primera tab" in q_lower:
                 first_tab = tabs[0]["title"] if tabs else active_window
                 answer = f"🔍 [SceneGraph] La primera pestaña abierta es: '{first_tab}'."
@@ -58,7 +59,8 @@ class AntiGravityEngine:
                 tabs_list = ", ".join([f"[{t['index']}] '{t['title']}'" for t in tabs])
                 answer = f"🔍 [SceneGraph] {len(tabs)} pestañas detectadas: {tabs_list}."
             else:
-                answer = f"🔍 [SceneGraph] Ventana activa: '{active_window}' ({active_app}). PID: {scene_context.get('process_id', 0)}."
+                ocr_preview = ocr_text[:180].replace("\n", " ") if ocr_text else "Sin texto detectado"
+                answer = f"🔍 [SceneGraph] Veo la aplicación '{active_window}' ({active_app}). Texto en pantalla: '{ocr_preview}'."
 
         # RUTA 2: History Query -> Memory Runtime
         elif intent == "HISTORY_QUERY":
